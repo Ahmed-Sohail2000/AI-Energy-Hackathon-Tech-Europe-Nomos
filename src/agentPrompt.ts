@@ -1,9 +1,14 @@
 import type { CaseFile } from "./types.js";
 import { readDigitsDe } from "./utils/format.js";
 
-export function buildDynamicVariables(caseFile: CaseFile) {
+// Data-only fields derived directly from the case fixture. Kept separate from
+// buildDynamicVariables() below so buildElevenLabsAgentScript() can consume it
+// without recursing back into buildDynamicVariables() (which itself calls
+// buildElevenLabsAgentScript() to populate opening_context_script).
+function rawCaseVariables(caseFile: CaseFile) {
   return {
     case_id: caseFile.id,
+    case_title: caseFile.case_title,
     lieferant: caseFile.lieferant,
     vnb_name: caseFile.vnb_name,
     malo_id: caseFile.malo_id,
@@ -19,6 +24,25 @@ export function buildDynamicVariables(caseFile: CaseFile) {
   };
 }
 
+// The full set of ElevenLabs dynamic variables for a call. Includes both plain
+// data (address, MaLo, ...) and behavioral fields (case_specific_guidance,
+// tool_sequence_hint, opening_context_script). The behavioral fields exist so
+// the ONE persistent ElevenLabs agent prompt (see buildAgentPromptTemplate)
+// can vary its actual behavior per case via {{placeholder}} substitution,
+// instead of requiring a human to re-paste a new prompt for every case.
+export function buildDynamicVariables(caseFile: CaseFile) {
+  return {
+    ...rawCaseVariables(caseFile),
+    case_specific_guidance: caseSpecificGuidance(caseFile.id) || "Keine zusaetzliche fallspezifische Anleitung.",
+    tool_sequence_hint: toolSequenceForCase(caseFile.id).join(", "),
+    opening_context_script: buildElevenLabsAgentScript(caseFile)
+  };
+}
+
+// Fully-interpolated preview of what the agent effectively sees once ElevenLabs
+// substitutes dynamic variables into buildAgentPromptTemplate()'s placeholders.
+// NOT consumed by the runtime call path (the widget never reads this) — it
+// exists for human review via /api/agent-config/:caseId ("Open JSON").
 export function buildAgentInstructions(caseFile: CaseFile): string {
   const vars = buildDynamicVariables(caseFile);
   const sequence = toolSequenceForCase(caseFile.id);
@@ -62,8 +86,59 @@ case.complete_clearing muss diagnosis, next_step, readback_confirmed und eine ku
 `;
 }
 
+// The ONE case-agnostic prompt template, pasted into the ElevenLabs agent's
+// system prompt in the ElevenLabs dashboard exactly once. It never changes
+// when the operator switches cases in the UI — only the dynamic variables
+// (buildDynamicVariables, sent fresh on every /api/voice-agent/session call)
+// change, and ElevenLabs substitutes them into these {{placeholder}}s at
+// call time. This is what makes case-switching change agent BEHAVIOR, not
+// just the data values it reads out loud.
+export function buildAgentPromptTemplate(): string {
+  return `
+Du bist der telefonische Klaerfall-Agent fuer Nomos. Fuehre ein kurzes deutsches Telefonat mit dem Netzbetreiber.
+
+ERSTE WORTE ZU EINEM MENSCHEN:
+"Guten Tag, hier spricht ein KI-Assistent im Auftrag des Stromlieferanten Nomos."
+
+Regeln:
+- Sprich immer Deutsch, freundlich, warm, kurz und professionell.
+- Wenn zuerst ein Telefonmenue antwortet, erkenne es als Menue und waehle per DTMF:
+  - Lieferantenwechsel oder Anmeldung: 1
+  - Marktkommunikation oder MaLo-Ident: 2
+- Verwende nur synthetische Falldaten.
+- Lies MaLo, Zaehlernummern und Vorgangsnummern langsam einzeln vor.
+- Wiederhole jede neue MaLo oder Vorgangsnummer zur Bestaetigung, bevor du auflegst.
+- Gewinne den Fall: Diagnose plus naechster Schritt ist wichtiger als Small Talk.
+- Wenn die Sachbearbeiterin unklar antwortet, frage konkret nach: "Was ist der konkrete Grund?" und "Was ist der naechste Schritt von unserer Seite?"
+- Halte wichtige Zwischenschritte mit case.record_call_event fest, wenn ein Menue gewaehlt wurde, ein Grund genannt wurde oder ein Aktenzeichen faellt.
+
+Gespraechseroeffnung fuer diesen Fall:
+{{opening_context_script}}
+
+Fallspezifische Anleitung:
+{{case_specific_guidance}}
+
+Aktueller Fall:
+- Fall: {{case_id}} / {{case_title}}
+- Netzbetreiber: {{vnb_name}}
+- Lieferant: {{lieferant}}
+- MaLo: {{malo_id_spoken}}
+- Lieferstelle: {{lieferstelle}}
+- Zaehlernummer: {{zaehlernummer_spoken}}
+- Anmeldung: {{anmeldung_datum}}
+- Lieferbeginn: {{lieferbeginn}}
+- Status: {{statustext}}
+- Symptom: {{symptom}}
+- Ziel: {{goal}}
+
+Pflicht-Skills nach dem Gespraech (in dieser Reihenfolge): {{tool_sequence_hint}}
+
+case.complete_clearing muss diagnosis, next_step, readback_confirmed und eine kurze backoffice_note_de enthalten.
+`;
+}
+
 export function buildElevenLabsAgentScript(caseFile: CaseFile): string {
-  const vars = buildDynamicVariables(caseFile);
+  const vars = rawCaseVariables(caseFile);
   if (caseFile.id === "CASE-C") {
     return [
       "Wenn ein Telefonmenue antwortet, waehle per DTMF die 2 fuer Marktkommunikation oder MaLo-Ident.",

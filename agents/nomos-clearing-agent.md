@@ -37,3 +37,7 @@ Always say this as the first words to a person:
 ## Success
 
 The call succeeds only if it captures both the real reason and the operational next step.
+
+## Delivery Mechanism
+
+This persona text corresponds to `buildAgentPromptTemplate()` in `src/agentPrompt.ts`. It is pasted into the ElevenLabs agent's system prompt exactly **once**, in the ElevenLabs dashboard, and does not change when the operator switches cases in the console. Case-specific behavior (which DTMF option to press, what to say when a menu answers, which tools to call in which order) arrives at call time through dynamic variables — `case_specific_guidance`, `tool_sequence_hint`, `opening_context_script`, plus the case data fields — not through per-case prompt edits. See `GET /api/agent-prompt-template` for the live template and `agents/elevenlabs-agent-skills.md` for the full variable list.

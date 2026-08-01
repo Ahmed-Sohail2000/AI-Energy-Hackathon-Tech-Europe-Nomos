@@ -20,10 +20,11 @@ Operational, calm, and precise. The console should feel like a professional back
 - Dense spacing, low copy, clear labels.
 - Avoid large decorative artwork, gradients, or oversized text blocks.
 - Mobile layout stacks screens with sticky navigation at the top.
+- **Split register by section**: the landing/marketing section (hero, flow, use cases, stack) is allowed a confident display headline — capped at `clamp(2.6rem, 4.4vw, 4.2rem)`, not the maximal marketing-scale size a landing page might default to — while the operator console section stays strictly dense/utilitarian per this brief. This is a deliberate compromise: a console-only product still needs a landing page that reads as a product, but the console itself should never adopt marketing-page proportions.
 
 ## Interaction Rules
 
 - Primary path is always `Next`.
 - Secondary actions are copy config, open JSON config, refresh, and simulate outcome.
-- Connector names shown in UI: ElevenLabs, Twilio, OpenAI, MCP Tools, Google Stitch.
+- Connector names shown in UI: ElevenLabs, Web Widget, Agent Prompt, MCP Tools. (This app is browser-widget-only — there is no Twilio, OpenAI, or Google Stitch integration.)
 - MCP tools should be visible as short command chips, not long paragraphs.

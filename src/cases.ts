@@ -14,7 +14,9 @@ export function loadCases(): CaseFile[] {
 export function getCase(caseId: string): CaseFile {
   const match = loadCases().find((item) => item.id === caseId);
   if (!match) {
-    throw new Error(`Unknown case_id: ${caseId}`);
+    const error = new Error(`Unknown case_id: ${caseId}`) as Error & { status?: number };
+    error.status = 404;
+    throw error;
   }
   return match;
 }

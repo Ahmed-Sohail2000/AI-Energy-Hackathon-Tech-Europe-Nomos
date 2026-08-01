@@ -21,3 +21,5 @@
 ## Readback Rule
 
 Every MaLo, corrected MaLo, meter number, and Vorgangsnummer must be spoken slowly one character at a time.
+
+See `agents/nomos-clearing-agent.md`'s "Delivery Mechanism" section for how this knowledge reaches the live agent.

@@ -172,7 +172,9 @@ function renderSetup() {
         <div class="actions">
           <button data-copy="${html(item.id)}" type="button">Copy config</button>
           <a href="/api/agent-config/${encodeURIComponent(item.id)}" target="_blank" rel="noreferrer">Open JSON</a>
+          <a href="/api/agent-prompt-template" target="_blank" rel="noreferrer">Prompt template</a>
         </div>
+        <p class="hint">One-time setup: paste the prompt template into the ElevenLabs agent's system prompt once. It never needs to change per case — case behavior arrives via dynamic variables on every call.</p>
       </section>
     </div>
     <section class="panel compact">
@@ -379,6 +381,12 @@ async function startVoiceAgent(caseId) {
   state.lastError = null;
   state.widget = null;
   render();
+  if (window.__elevenlabsWidgetLoadFailed) {
+    state.lastError = "Voice widget failed to load from the ElevenLabs CDN. Check network/CDN availability and reload.";
+    state.pendingVoiceAgent = false;
+    render();
+    return;
+  }
   try {
     const result = await api("/api/voice-agent/session", {
       method: "POST",

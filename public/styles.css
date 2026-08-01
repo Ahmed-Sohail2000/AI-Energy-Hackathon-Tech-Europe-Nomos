@@ -140,8 +140,8 @@ p {
 h1 {
   max-width: 760px;
   margin-bottom: 18px;
-  font-size: clamp(3.4rem, 7.4vw, 7.2rem);
-  line-height: 0.92;
+  font-size: clamp(2.6rem, 4.4vw, 4.2rem);
+  line-height: 1.05;
   letter-spacing: 0;
 }
 
@@ -655,6 +655,13 @@ small,
   margin-bottom: 14px;
 }
 
+.hint {
+  margin-top: 10px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
 .chips span,
 .tag,
 .pill {
@@ -888,7 +895,8 @@ pre {
   }
 
   h1 {
-    font-size: clamp(2.65rem, 15vw, 4.4rem);
+    font-size: clamp(2.2rem, 9vw, 3rem);
+    line-height: 1.08;
   }
 
   .agent-screen,

@@ -1,6 +1,8 @@
 # ElevenLabs Agent Skills
 
-Use this file as the skill map when configuring the ElevenLabs Conversational AI agent for Nomos clearing calls. Keep these skills attached to the same agent that receives the per-call dynamic variables from `/api/agent-config/:caseId`.
+Use this file as the skill map when configuring the ElevenLabs Conversational AI agent for Nomos clearing calls. Keep these skills attached to the same agent that receives the per-call dynamic variables from `/api/voice-agent/session`.
+
+This file is the prose source of truth for the agent's persona and behavior; `src/agentPrompt.ts`'s `buildAgentPromptTemplate()` is its code counterpart, pasted into the ElevenLabs dashboard once (see `agents/nomos-clearing-agent.md`'s "Delivery Mechanism" section). If you change behavior here, update `buildAgentPromptTemplate()` (and re-paste the template) to match.
 
 ## Core Script
 
@@ -23,9 +25,11 @@ For CASE-C, follow the example "clerk hands out the market-location number" call
 
 ## Runtime Variables
 
-Required dynamic variables:
+Required dynamic variables (returned by `buildDynamicVariables()` in `src/agentPrompt.ts`, sent fresh on every `/api/voice-agent/session` call):
 
-- `case_id`
+Data fields:
+
+- `case_id` and `case_title`
 - `vnb_name`
 - `lieferant`
 - `malo_id` and `malo_id_spoken`
@@ -36,6 +40,12 @@ Required dynamic variables:
 - `statustext`
 - `symptom`
 - `goal`
+
+Behavioral fields — these are what let the ONE persistent agent prompt vary its actual behavior per case, instead of needing a per-case prompt edit:
+
+- `case_specific_guidance`: the case-specific playbook text (e.g. the CASE-C MaLo-Ident instructions below).
+- `tool_sequence_hint`: the required tool-call order for this case, as a comma-separated string.
+- `opening_context_script`: the case-specific conversation opening (what to say once a menu is navigated and a person answers).
 
 ## Skills To Configure
 
