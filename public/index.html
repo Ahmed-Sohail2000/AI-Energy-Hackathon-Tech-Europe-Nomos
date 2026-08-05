@@ -14,90 +14,58 @@
     <header class="site-nav">
       <a class="brand" href="#top" aria-label="Nomos Voice Agent">
         <span></span>
-        Nomos Voice Agent
+        Nomos
       </a>
       <nav aria-label="Page">
         <a href="#flow">Flow</a>
         <a href="#cases">Cases</a>
         <a href="#console">Console</a>
       </nav>
-      <button data-scroll-cases class="quiet" type="button">Use agent</button>
+      <button data-scroll-console type="button">Open console</button>
     </header>
 
     <main id="top">
       <section class="hero" aria-labelledby="hero-title">
-        <div class="hero-copy">
-          <p class="eyebrow">Nomos clearing agent</p>
-          <h1 id="hero-title">Phone clearing, handled by voice AI.</h1>
-          <p>
-            ElevenLabs runs directly inside the dashboard. The agent receives case context, verifies the data, and writes the operational result.
-          </p>
-          <div class="hero-actions">
-            <button data-scroll-cases type="button">Use voice agent</button>
-            <button data-scroll-console class="secondary" type="button">Open console</button>
-          </div>
-          <div class="hero-proof" aria-label="Capabilities">
-            <span>German voice</span>
-            <span>IVR keypad</span>
-            <span>Digit readback</span>
-            <span>MCP actions</span>
-          </div>
+        <p class="eyebrow">Nomos clearing agent</p>
+        <h1 id="hero-title">Phone clearing, handled by voice AI.</h1>
+        <p class="hero-lede">
+          ElevenLabs runs directly inside the dashboard — the agent receives case context, verifies the data, and writes the operational result.
+        </p>
+        <div class="hero-actions">
+          <button data-scroll-cases type="button">Try a live case</button>
+          <a class="hero-link" data-scroll-console href="#console">View console →</a>
         </div>
-
-        <div class="hero-visual" aria-label="Voice agent workflow preview">
-          <div class="agent-screen">
-            <div class="agent-topbar">
-              <span></span>
-              <strong>Live call path</strong>
-              <em>ready</em>
-            </div>
-            <div class="workflow-orbit" aria-hidden="true">
-              <div class="flow-line"></div>
-              <span class="flow-dot"></span>
-              <article class="flow-node node-one"><strong>Case</strong><small>MaLo + meter</small></article>
-              <article class="flow-node node-two"><strong>Widget</strong><small>browser mic</small></article>
-              <article class="flow-node node-three"><strong>ElevenLabs</strong><small>voice agent</small></article>
-              <article class="flow-node node-four"><strong>Outcome</strong><small>next step</small></article>
-            </div>
-            <div class="voice-wave" aria-hidden="true">
-              <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-            </div>
-            <div class="agent-result">
-              <span>Verified</span>
-              <strong>Reason captured. Next action saved.</strong>
-            </div>
-          </div>
-        </div>
+        <p class="hero-proof">German voice &middot; IVR keypad &middot; Digit readback &middot; MCP actions</p>
       </section>
 
       <section id="flow" class="section">
         <div class="section-head">
-          <p class="eyebrow">Integration flow</p>
+          <p class="eyebrow">How it works</p>
           <h2>From stuck case to verified action.</h2>
         </div>
-        <div class="process-track" aria-label="ElevenLabs voice agent process">
+        <div class="flow-steps" aria-label="ElevenLabs voice agent process">
           <article>
-            <span>1</span>
+            <span>01</span>
             <strong>Pick case</strong>
             <p>Fixture data becomes call context.</p>
           </article>
           <article>
-            <span>2</span>
+            <span>02</span>
             <strong>Open widget</strong>
             <p>Browser voice starts inside the dashboard.</p>
           </article>
           <article>
-            <span>3</span>
+            <span>03</span>
             <strong>Speak</strong>
             <p>ElevenLabs handles the German conversation.</p>
           </article>
           <article>
-            <span>4</span>
+            <span>04</span>
             <strong>Verify</strong>
             <p>MaLo, address, meter, reason, next step.</p>
           </article>
           <article>
-            <span>5</span>
+            <span>05</span>
             <strong>Act</strong>
             <p>Structured outcome and follow-up action.</p>
           </article>
@@ -114,34 +82,26 @@
             <span>CASE-A</span>
             <strong>Registration bounced</strong>
             <small>Discover why the MaLo is dead.</small>
-            <em>Prepare</em>
+            <em>Prepare &rarr;</em>
           </button>
           <button data-landing-case="CASE-B" type="button">
             <span>CASE-B</span>
             <strong>Silent registration</strong>
             <small>Confirm processing and reference.</small>
-            <em>Prepare</em>
+            <em>Prepare &rarr;</em>
           </button>
           <button data-landing-case="CASE-C" type="button">
             <span>CASE-C</span>
             <strong>Wrong MaLo</strong>
             <small>Get corrected MaLo and readback.</small>
-            <em>Prepare</em>
+            <em>Prepare &rarr;</em>
           </button>
         </div>
       </section>
 
       <section class="section stack-section">
-        <div class="section-head">
-          <p class="eyebrow">MVP stack</p>
-          <h2>Feasible stack, live-call ready.</h2>
-        </div>
-        <div class="stack-grid">
-          <article><strong>Express + TypeScript</strong><span>API, tools, run storage</span></article>
-          <article><strong>ElevenLabs Widget</strong><span>Embedded browser voice</span></article>
-          <article><strong>ElevenLabs</strong><span>German voice agent</span></article>
-          <article><strong>MCP-style tools</strong><span>Structured actions</span></article>
-        </div>
+        <p class="eyebrow">Built with</p>
+        <p class="stack-row">Express + TypeScript &middot; ElevenLabs Conversational AI &middot; MCP-style tools</p>
       </section>
 
       <section id="console" class="console-shell" aria-label="Operator console">
@@ -185,6 +145,14 @@
         <section id="page" class="page" aria-live="polite"></section>
       </section>
     </main>
+
+    <footer class="site-footer">
+      <a class="brand" href="#top" aria-label="Nomos Voice Agent">
+        <span></span>
+        Nomos
+      </a>
+      <p>Synthetic demo data only &mdash; no real customer or grid-operator information.</p>
+    </footer>
 
     <script
       src="https://unpkg.com/@elevenlabs/convai-widget-embed"
